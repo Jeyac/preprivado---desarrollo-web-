@@ -520,81 +520,95 @@ Para que esto funcionara, también completé el envío del formulario: ahora Jav
 
 ## Actividad 7
 
-### Práctica en OneCompiler · Funciones y Arreglos
+### Práctica de JavaScript · Arreglos y funciones
 
-Resolví 12 ejercicios del curso de JavaScript de OneCompiler (sección 5, Funciones, y sección 6, Arreglos). Todos dieron la salida correcta.
+Resolví un ejercicio en cada una de las cinco herramientas: el curso y el editor de OneCompiler, W3Schools, CodePen y JavaScript.info.
 
-**Ejercicio 1. Funciones 1 · Defining a Function**
+**1. OneCompiler: curso con ejercicios**
 
-Creé la función `greet(name)`, que muestra "Welcome, <nombre>!". Con la entrada Dave mostró "Welcome, Dave!".
+En el curso de JavaScript de OneCompiler hice la práctica **Array Basics** (sección Arrays). Había que leer un número desde la entrada y mostrar: cuántas temperaturas hay en el arreglo `temps`, la primera, la última (con `.at(-1)`) y la que está en la posición recibida. Completé las líneas que tenían signos de pregunta con `temps[0]`, `temps.at(-1)` y `temps[i]`. Con la entrada 2 la salida fue 5, 18, 23 y 25, igual a la que pedía el ejercicio.
 
-![Ejercicio 1: Funciones 1 · Defining a Function](img/onecompiler-ejercicio01.jpg)
+**Figura 1.** Código completado en la práctica Array Basics.
 
-**Ejercicio 2. Funciones 2 · Returning a Value**
+![Figura 1: código completado en Array Basics de OneCompiler](img/js-figura1.jpg)
 
-Hice `square(n)`, que devuelve un número multiplicado por sí mismo, y `average(a, b)`, que devuelve el promedio de dos números. Con 6 y 7 dio 36 y 6.5.
+**Figura 2.** Salida del ejercicio con la entrada 2.
 
-![Ejercicio 2: Funciones 2 · Returning a Value](img/onecompiler-ejercicio02.jpg)
+![Figura 2: salida del ejercicio con la entrada 2](img/js-figura2.jpg)
 
-**Ejercicio 3. Funciones 3 · Arrow Functions**
+**2. OneCompiler: editor de JavaScript**
 
-Escribí `triple`, `add` y `shout` en la forma corta (funciones flecha). Con 5 y "hey" dio 15, 9 y "HEY!".
+En el editor de OneCompiler escribí una práctica de funciones con arreglos. Creé el arreglo `notas` y dos funciones flecha: `promedio`, que suma las notas con `reduce` y divide entre `length`, y `aprobados`, que se queda solo con las notas de 70 o más usando `filter`. También saqué la nota más alta con `Math.max` y `...notas`.
 
-![Ejercicio 3: Funciones 3 · Arrow Functions](img/onecompiler-ejercicio03.jpg)
+```js
+const notas = [85, 92, 78, 64, 90];
+const promedio = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
+const aprobados = (arr) => arr.filter(n => n >= 70);
+console.log("Promedio:", promedio(notas));        // 81.8
+console.log("Aprobados:", aprobados(notas));      // [85, 92, 78, 90]
+console.log("Nota mas alta:", Math.max(...notas)); // 92
+```
 
-**Ejercicio 4. Funciones 4 · Default Parameters**
+**Figura 3.** Código y resultado en la consola del editor de OneCompiler.
 
-La función `greet` usa "Hello" si no le paso otro saludo. Con Ada mostró "Hello, Ada!" y "Welcome back, Ada!".
+![Figura 3: código y resultado en el editor de OneCompiler](img/js-figura3.jpg)
 
-![Ejercicio 4: Funciones 4 · Default Parameters](img/onecompiler-ejercicio04.jpg)
+**3. W3Schools: ejercicios de JavaScript**
 
-**Ejercicio 5. Funciones 5 · Functions as Values**
+En los ejercicios de W3Schools abrí **JS Arrays**, que pregunta cuál opción **no** es una forma válida de crear un arreglo. Elegí la que usa paréntesis, `const fruits = ('Orange', 'Banana', 'Apple')`, porque los arreglos se crean con corchetes `[]` o con `new Array()`. La página confirmó que la respuesta era correcta.
 
-`applyTwice(fn, x)` recibe otra función y la usa dos veces. Con 5 dio 20 y con "wow" dio "wow!!".
+**Figura 4.** Pregunta del ejercicio JS Arrays.
 
-![Ejercicio 5: Funciones 5 · Functions as Values](img/onecompiler-ejercicio05.jpg)
+![Figura 4: pregunta del ejercicio JS Arrays en W3Schools](img/js-figura4.jpg)
 
-**Ejercicio 6. Funciones 6 · Scope and Closures**
+**Figura 5.** Confirmación de respuesta correcta.
 
-`makeCounter()` crea un contador que recuerda su número. Cada vez que lo llamo sube: 1, 2, 3. Un contador nuevo empieza otra vez en 1.
+![Figura 5: respuesta correcta en W3Schools](img/js-figura5.jpg)
 
-![Ejercicio 6: Funciones 6 · Scope and Closures](img/onecompiler-ejercicio06.jpg)
+**4. CodePen: HTML, CSS y JavaScript juntos**
 
-**Ejercicio 7. Arreglos 1 · Array Basics**
+En CodePen creé un pen nuevo. En el panel HTML puse un título y un párrafo con `id="resultado"`. En el panel JS creé el arreglo `inscripciones` con tres nombres, una función que devuelve cuántos hay con `length` y una línea que muestra ese número dentro del párrafo. La vista previa dice "Cantidad de inscripciones: 3".
 
-Con un arreglo de temperaturas usé `length` (cuántos hay), `temps[0]` (el primero), `temps.at(-1)` (el último) y `temps[i]` (el de una posición). Con la entrada 2 mostró 5, 18, 23 y 25.
+```html
+<h2>Inscripciones</h2>
+<p id="resultado"></p>
+```
 
-![Ejercicio 7: Arreglos 1 · Array Basics](img/onecompiler-ejercicio07.jpg)
+```js
+const inscripciones = ["Ana", "Luis", "Maria"];
+function contarInscripciones(lista) { return lista.length; }
+document.getElementById("resultado").textContent =
+  "Cantidad de inscripciones: " + contarInscripciones(inscripciones);
+```
 
-**Ejercicio 8. Arreglos 2 · push, pop, shift, unshift**
+**Figura 6.** Pen con el arreglo `inscripciones` y el resultado en el párrafo.
 
-Agregué tres nombres con `push`, puse "VIP" al inicio con `unshift` y quité el último con `pop`. Quedó `['VIP', 'Alice', 'Bob']`.
+![Figura 6: pen de CodePen con el resultado](img/js-figura6.jpg)
 
-![Ejercicio 8: Arreglos 2 · push, pop, shift, unshift](img/onecompiler-ejercicio08.jpg)
+**5. JavaScript.info: guía de arreglos en español**
 
-**Ejercicio 9. Arreglos 3 · slice y spread**
+En la guía de arreglos de JavaScript.info resolví la tarea **Operaciones en arrays**. Pide crear el arreglo `styles` con "Jazz" y "Blues", agregar "Rock-n-Roll" al final, cambiar el valor del medio por "Classics" (con una fórmula que sirva para cualquier arreglo de largo impar), quitar y mostrar el primero, y poner "Rap" y "Reggae" al inicio. Ejecuté la solución en el navegador y la salida coincide paso a paso con la de la tarea.
 
-`slice` copia una parte del arreglo sin cambiar el original, y `[...nums, 60]` crea un arreglo nuevo con un 60 al final. Con 1 y 3 dio `[20, 30]`.
+```js
+let styles = ["Jazz", "Blues"];
+styles.push("Rock-n-Roll");
+styles[Math.floor((styles.length - 1) / 2)] = "Classics";
+console.log("Quitado: " + styles.shift());
+styles.unshift("Rap", "Reggae");
+console.log(styles.join(", ")); // Rap, Reggae, Classics, Rock-n-Roll
+```
 
-![Ejercicio 9: Arreglos 3 · slice y spread](img/onecompiler-ejercicio09.jpg)
+**Figura 7.** Enunciado de la tarea Operaciones en arrays.
 
-**Ejercicio 10. Arreglos 4 · forEach**
+![Figura 7: enunciado de Operaciones en arrays](img/js-figura7.jpg)
 
-Con `forEach` recorrí un menú y mostré cada plato numerado con su precio. Al final sumé el total: 18.
+**Figura 8.** Solución ejecutada y su salida.
 
-![Ejercicio 10: Arreglos 4 · forEach](img/onecompiler-ejercicio10.jpg)
+![Figura 8: solución ejecutada y su salida](img/js-figura8.jpg)
 
-**Ejercicio 11. Arreglos 5 · Sorting**
+**Conclusión**
 
-Ordené los números 31 4 15 9 26 con `toSorted()`. Sin indicar cómo ordenar los toma como texto. Con `(a, b) => a - b` quedan de menor a mayor y con `(a, b) => b - a` de mayor a menor.
-
-![Ejercicio 11: Arreglos 5 · Sorting](img/onecompiler-ejercicio11.jpg)
-
-**Ejercicio 12. Arreglos 6 · Arrays and References**
-
-`backup = [...sales]` hace una copia de verdad. Al cambiar `sales`, la copia `backup` no cambió.
-
-![Ejercicio 12: Arreglos 6 · Arrays and References](img/onecompiler-ejercicio12.jpg)
+Cada herramienta me ayudó a practicar lo mismo de forma distinta: OneCompiler para ejecutar código y ver la salida en la consola, W3Schools para repasar la teoría con preguntas rápidas, CodePen para unir JavaScript con el HTML de una página y JavaScript.info para usar varios métodos de arreglos (`push`, `shift`, `unshift` y las posiciones) en un mismo problema.
 
 ### Reto guiado · Cuenta las inscripciones
 
