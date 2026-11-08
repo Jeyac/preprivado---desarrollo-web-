@@ -308,7 +308,7 @@ En **ancho de teléfono** (390 px, menos de 640 px), se activa el media query: l
 
 ### Pruebas de manipulación del formulario
 
-El 8 de noviembre de 2026 hice 10 pruebas en `http://localhost:3000/` usando la consola del navegador (`F12`). La idea era ver qué pasa si alguien cambia el formulario a propósito: quitar validaciones, meter opciones falsas o escribir código en los campos.
+El 8 de noviembre de 2026 hice 10 pruebas en `http://localhost:3000/` usando la consola del navegador (`F12`). Las capturas las volví a tomar en alta calidad repitiendo cada prueba sobre la versión final del proyecto (por eso la lista ya tiene el botón **Quitar**). La idea era ver qué pasa si alguien cambia el formulario a propósito: quitar validaciones, meter opciones falsas o escribir código en los campos.
 
 **Estado inicial del formulario**
 
@@ -388,7 +388,7 @@ document.getElementById("formulario-registro").requestSubmit();
 // Resultado: "El correo no tiene un formato válido."
 ```
 
-Al enviar con el correo `esto-no-es-email` aparece el mensaje "El correo no tiene un formato válido." y no se guarda nada.
+Al intentar enviar con el correo `esto-no-es-email`, el navegador **detiene el envío** porque el campo sigue siendo `type="email"`. No aparece ningún mensaje del servidor porque los datos ni siquiera salen de la página, y no se guarda nada.
 
 ![Prueba 6: se detecta el correo inválido](img/seguridad-07.jpg)
 
@@ -419,7 +419,7 @@ El formulario se envió y se guardó. El mensaje de confirmación muestra el nom
 
 **Prueba 9: los datos falsos aparecen en la lista**
 
-La lista de participantes muestra los dos registros con nombres raros, el taller falso y el horario falso. Las etiquetas se ven como texto y **no se ejecutan**, porque `app.js` usa `textContent` en lugar de `innerHTML`.
+La lista de participantes muestra el registro con el nombre raro, el taller falso y el horario falso. Las etiquetas se ven como texto y **no se ejecutan**, porque `app.js` usa `textContent` en lugar de `innerHTML`.
 
 ![Prueba 9: datos falsos en la lista](img/seguridad-10.jpg)
 
@@ -438,7 +438,7 @@ Cambié el título y otros textos. Ese cambio solo se ve en **mi** navegador y s
 **Lo que aprendí**
 
 1. Todo lo del navegador (`required`, `type="email"`, las opciones de las listas) se puede cambiar desde la consola. Por eso el servidor tiene que revisar los datos otra vez.
-2. Mi servidor **sí** revisa que no falten campos, que el correo esté bien escrito y que haya cupo. Por eso en la prueba 6 el correo falso fue rechazado.
+2. Mi servidor **sí** revisa que no falten campos, que el correo esté bien escrito y que haya cupo. Si alguien lograra mandar el correo falso de la prueba 6 saltándose el navegador, el servidor lo rechazaría con un error 400.
 3. Lo que el servidor **todavía no** revisa es que el taller y el horario sean de la lista real. Por eso se guardaron "Taller Hackeado" y el horario del domingo.
 4. Las etiquetas como `<script>` no se ejecutan porque la página usa `textContent`, que las muestra como texto.
 5. El texto "DROP TABLE" no hace daño en este proyecto porque todavía no hay base de datos; los registros se guardan en un arreglo. Cuando se use SQL, hay que usar consultas preparadas.
