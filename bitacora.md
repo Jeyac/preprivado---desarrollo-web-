@@ -962,26 +962,6 @@ SELECT COUNT(*) AS filas_restantes FROM talleres;
 
 ## Actividad 11
 
-### Control de versiones · Git
-
-![Actividad 11: ¿Cuál es el orden correcto para guardar y publicar un cambio?](img/actividad11.png)
-
-**¿Cuál es el orden correcto para guardar y publicar un cambio?** `add` → `commit` → `push`.
-
-**Revisé `.gitignore`:** sí excluye `node_modules/` y `.env` (también `.DS_Store`), así que esas carpetas y archivos no se suben.
-
-**¿Qué diferencia hay entre add, commit y push?**
-
-- **`git add`:** es como **elegir** qué cambios quiero guardar. Los pone en una "zona de espera" (stage), pero todavía no los guarda.
-- **`git commit`:** **guarda** esos cambios como una versión en mi computadora, con un mensaje que explica qué hice. Es como tomar una foto del proyecto en ese momento.
-- **`git push`:** **envía** las versiones guardadas a GitHub, para que estén en internet y otros las puedan ver.
-
-En resumen: `add` elige, `commit` guarda en mi computadora y `push` lo sube a GitHub.
-
-**¿Qué información comunica un buen mensaje de commit?**
-
-Un buen mensaje dice **qué cambió** de forma corta y clara, para que cualquiera (o yo en el futuro) entienda ese cambio sin abrir los archivos. Por ejemplo, "Completa formulario y estilos" dice mucho más que "cambios" o "arreglos". Lo ideal es empezar con un verbo (Agrega, Corrige, Completa) y hablar de un solo cambio por commit.
-
 ### Tu ejercicio · tres cambios, tres commits
 
 Ejecuté `git init` dentro de la carpeta `registro-taller-estudiante` para que el proyecto tenga su propio repositorio. Git ya tenía configurado mi nombre, así que no tuve que usar `git config`. Hice tres commits, uno por cada etapa del proyecto:
@@ -1005,3 +985,21 @@ Guarda lo que faltaba: `public/app.js`, la bitácora y sus imágenes. Al final, 
 ![Commit 3: JavaScript, API y bitácora](img/git-commit3.png)
 
 Los avisos amarillos (`LF will be replaced by CRLF`) no son errores: Git solo avisa que en Windows los saltos de línea se guardan de otra forma.
+
+### Control de versiones · Git
+
+![Actividad 11: ¿Cuál es el orden correcto para guardar y publicar un cambio?](img/actividad11.png)
+
+**Revisé `.gitignore`:** sí excluye `node_modules/` y `.env` (también `.DS_Store`), así que esas carpetas y archivos no se suben.
+
+**¿Qué diferencia hay entre add, commit y push?**
+
+- **`git add`:** es como **elegir** qué cambios quiero guardar. Los pone en una "zona de espera" (stage), pero todavía no los guarda.
+- **`git commit`:** **guarda** esos cambios como una versión en mi computadora, con un mensaje que explica qué hice. Es como tomar una foto del proyecto en ese momento.
+- **`git push`:** **envía** las versiones guardadas a GitHub, para que estén en internet y otros las puedan ver.
+
+En resumen: `add` elige, `commit` guarda en mi computadora y `push` lo sube a GitHub.
+
+**¿Qué información comunica un buen mensaje de commit?**
+
+Un buen mensaje dice **qué cambió** de forma corta y clara, para que cualquiera (o yo en el futuro) entienda ese cambio sin abrir los archivos. Por ejemplo, "Completa formulario y estilos" dice mucho más que "cambios" o "arreglos". Lo ideal es empezar con un verbo (Agrega, Corrige, Completa) y hablar de un solo cambio por commit.
