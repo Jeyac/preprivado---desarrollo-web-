@@ -3,40 +3,80 @@
 Completa una ficha por tema con tus palabras. No copies párrafos de los sitios consultados.
 
 ## HTML
-- Resumen propio (2–3 frases):
-- Dos términos clave y su explicación:
-- Ejemplo de código explicado:
-- Pregunta que podría aparecer en el examen:
+- **Resumen propio:** HTML es lo que arma la página: dice qué hay en ella, como títulos, textos, botones y formularios. Es como el esqueleto de una casa. Sin HTML no habría nada que mostrar.
+- **Dos términos clave:**
+  - **Etiqueta:** es una palabra entre `< >` que dice qué es cada cosa, por ejemplo `<h1>` para un título o `<form>` para un formulario.
+  - **Atributo:** es un dato extra que se escribe dentro de la etiqueta para darle más información, por ejemplo `required` para que una casilla sea obligatoria.
+- **Ejemplo de código explicado:**
+  ```html
+  <label for="correo">Correo electrónico</label>
+  <input id="correo" name="correo" type="email" required>
+  ```
+  La primera línea es el texto que se ve encima de la casilla. La segunda es la casilla donde se escribe el correo. El `for` y el `id` tienen el mismo nombre para que el texto quede unido a su casilla, y `required` hace que no se pueda dejar vacía.
+- **Pregunta que podría aparecer en el examen:** ¿Para qué sirve que el `for` de un `label` tenga el mismo nombre que el `id` de su casilla?
 
 ## CSS
-- Resumen propio (2–3 frases):
-- Dos términos clave y su explicación:
-- Ejemplo de código explicado:
-- Pregunta que podría aparecer en el examen:
+- **Resumen propio:** CSS es lo que le da la apariencia a la página: colores, tamaños, espacios y el orden de las cosas. Si HTML es el esqueleto, CSS es la pintura y los muebles. También permite que la página se vea bien en una computadora y en un teléfono.
+- **Dos términos clave:**
+  - **Padding:** es el espacio de adentro, entre el borde de una caja y lo que tiene dentro.
+  - **Margin:** es el espacio de afuera, entre una caja y lo que tiene alrededor.
+- **Ejemplo de código explicado:**
+  ```css
+  @media (max-width: 640px) {
+    form { padding: 1rem; }
+  }
+  ```
+  Esto dice: "cuando la pantalla sea de 640 px o menos, como un teléfono, deja menos espacio dentro del formulario". Así los campos tienen más lugar en pantallas pequeñas.
+- **Pregunta que podría aparecer en el examen:** ¿Cuál es la diferencia entre `padding` y `margin`?
 
 ## JavaScript y DOM
-- Resumen propio (2–3 frases):
-- Dos términos clave y su explicación:
-- Ejemplo de código explicado:
-- Pregunta que podría aparecer en el examen:
+- **Resumen propio:** JavaScript es lo que hace que la página reaccione cuando la persona hace algo, como presionar un botón. El DOM es la forma en que JavaScript "ve" la página para poder leerla y cambiarla. Con los dos, la página puede enviar datos y mostrar resultados sin recargarse.
+- **Dos términos clave:**
+  - **Evento:** es algo que pasa en la página, como un clic o enviar un formulario.
+  - **Variable:** es como una caja con nombre donde se guarda un dato para usarlo después.
+- **Ejemplo de código explicado:**
+  ```js
+  formulario.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+  });
+  ```
+  Esto dice: "cuando alguien envíe el formulario, no recargues la página". Así JavaScript puede encargarse de mandar los datos él mismo.
+- **Pregunta que podría aparecer en el examen:** ¿Para qué se usa `preventDefault()` al enviar un formulario?
 
 ## Node.js, Express y API
-- Resumen propio (2–3 frases):
-- Dos términos clave y su explicación:
-- Ejemplo de ruta o solicitud explicado:
-- Pregunta que podría aparecer en el examen:
+- **Resumen propio:** Node.js permite usar JavaScript fuera del navegador para crear un servidor, que es el programa que recibe y guarda la información. Express hace más fácil crear ese servidor. Una API es la "ventanilla" por donde la página le pide o le manda datos al servidor.
+- **Dos términos clave:**
+  - **Ruta:** es una dirección del servidor, como `/api/inscripciones`, a la que la página le pide algo.
+  - **Código de estado:** es un número con el que el servidor avisa cómo le fue: 201 si guardó algo nuevo y 400 si los datos venían mal.
+- **Ejemplo de ruta explicado:**
+  ```js
+  app.get("/api/inscripciones", (req, res) => {
+    res.json(inscripciones);
+  });
+  ```
+  Cuando la página pide la dirección `/api/inscripciones`, el servidor le contesta con la lista de personas inscritas.
+- **Pregunta que podría aparecer en el examen:** ¿Qué diferencia hay entre pedir datos con GET y enviarlos con POST?
 
 ## SQL
-- Resumen propio (2–3 frases):
-- Explica SELECT, INSERT, UPDATE y DELETE:
-- ¿Qué son una clave primaria y una clave foránea?
-- Pregunta que podría aparecer en el examen:
+- **Resumen propio:** SQL es el idioma que se usa para hablar con una base de datos, que es donde la información se guarda de forma permanente, en tablas parecidas a una hoja de cálculo. Con SQL se puede guardar, buscar, cambiar y borrar información.
+- **SELECT, INSERT, UPDATE y DELETE:**
+  - **SELECT:** busca y muestra datos de una tabla.
+  - **INSERT:** agrega una fila nueva.
+  - **UPDATE:** cambia datos que ya estaban.
+  - **DELETE:** borra filas.
+- **¿Qué son una clave primaria y una clave foránea?**
+  - **Clave primaria:** es un dato que identifica a cada fila sin repetirse, como el número de carné de un estudiante.
+  - **Clave foránea:** es un dato que conecta una tabla con otra. Por ejemplo, en una tabla de inscripciones se guarda el número del taller para saber a qué taller pertenece cada persona.
+- **Pregunta que podría aparecer en el examen:** ¿Qué pasa si usas `DELETE` sin poner `WHERE`?
 
 ## Git y GitHub
-- Resumen propio (2–3 frases):
-- Explica add, commit y push:
-- Diferencia entre Git y GitHub:
-- Pregunta que podría aparecer en el examen:
+- **Resumen propio:** Git guarda el historial de los cambios de un proyecto, como si tomara fotos de cómo va quedando. Así se puede ver qué se cambió y regresar a una versión anterior. GitHub es una página de internet donde se guardan esos proyectos para compartirlos.
+- **add, commit y push:**
+  - **add:** elige qué cambios quiero guardar.
+  - **commit:** guarda esos cambios en mi computadora con un mensaje que explica qué hice.
+  - **push:** sube lo que guardé a GitHub.
+- **Diferencia entre Git y GitHub:** Git es el programa que guarda las versiones en mi computadora. GitHub es el sitio de internet donde subo esas versiones para tenerlas en línea y compartirlas.
+- **Pregunta que podría aparecer en el examen:** ¿En qué orden se usan `add`, `commit` y `push`, y qué hace cada uno?
 
 ## Actividad 1 · traza el recorrido (Ana presiona Registrar)
 
