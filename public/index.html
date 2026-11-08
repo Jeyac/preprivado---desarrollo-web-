@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro al taller de Desarrollo Web</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="contenedor">
+    <header class="encabezado">
+      <p class="etiqueta">Universidad · Actividad de clase</p>
+      <h1>Registro al taller</h1>
+      <p>Completa tus datos para reservar un espacio.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="titulo-formulario">
+      <h2 id="titulo-formulario" class="titulo">Datos de inscripción</h2>
+      <form id="formulario-registro">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" name="nombre" type="text" placeholder="Ej.: Ana López" required minlength="2" autocomplete="name">
+
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" name="correo" type="email" placeholder="Ej.: ana@correo.com" required autocomplete="email">
+
+        <label for="taller">Taller</label>
+        <select id="taller" name="taller" required>
+          <option value="">Selecciona un taller</option>
+          <option value="HTML y CSS">HTML y CSS</option>
+          <option value="Diseño responsive">Diseño responsive</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="Node.js y Express">Node.js y Express</option>
+          <option value="Bases de datos con SQL">Bases de datos con SQL</option>
+          <option value="Git y GitHub">Git y GitHub</option>
+        </select>
+
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" type="tel" placeholder="Ej.: 5555 1234" required autocomplete="tel">
+
+        <label for="horario">Horario</label>
+        <select id="horario" name="horario" required>
+          <option value="">Selecciona un horario</option>
+          <optgroup label="Mañana">
+            <option value="Lunes y miércoles, 8:00 a 10:00">Lunes y miércoles · 8:00 a 10:00</option>
+            <option value="Martes y jueves, 8:00 a 10:00">Martes y jueves · 8:00 a 10:00</option>
+          </optgroup>
+          <optgroup label="Tarde">
+            <option value="Lunes y miércoles, 14:00 a 16:00">Lunes y miércoles · 14:00 a 16:00</option>
+            <option value="Martes y jueves, 14:00 a 16:00">Martes y jueves · 14:00 a 16:00</option>
+          </optgroup>
+          <optgroup label="Noche">
+            <option value="Lunes y miércoles, 18:00 a 20:00">Lunes y miércoles · 18:00 a 20:00</option>
+            <option value="Viernes, 18:00 a 21:00">Viernes · 18:00 a 21:00</option>
+          </optgroup>
+          <optgroup label="Fin de semana">
+            <option value="Sábado, 9:00 a 12:00">Sábado · 9:00 a 12:00</option>
+          </optgroup>
+        </select>
+
+        <button type="submit">Registrar inscripción</button>
+      </form>
+      <p id="mensaje" class="mensaje" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="titulo-lista">
+      <h2 id="titulo-lista" class="titulo">Participantes inscritos</h2>
+      <ul id="lista-inscripciones" aria-live="polite">
+        <li class="vacio">Aún no hay inscripciones.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
