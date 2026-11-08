@@ -1003,3 +1003,54 @@ En resumen: `add` elige, `commit` guarda en mi computadora y `push` lo sube a Gi
 **¿Qué información comunica un buen mensaje de commit?**
 
 Un buen mensaje dice **qué cambió** de forma corta y clara, para que cualquiera (o yo en el futuro) entienda ese cambio sin abrir los archivos. Por ejemplo, "Completa formulario y estilos" dice mucho más que "cambios" o "arreglos". Lo ideal es empezar con un verbo (Agrega, Corrige, Completa) y hablar de un solo cambio por commit.
+
+## Actividad 12
+
+### Publicación · Cuenta y repositorio de GitHub
+
+**A · Cuenta de GitHub**
+
+Yo ya tenía una cuenta de GitHub (usuario **Jeyac**), así que no tuve que crear una nueva. Solo inicié sesión.
+
+**Paso 1 · Abrir GitHub sin sesión.** Entré a github.com, donde aparecen las opciones *Sign in* (iniciar sesión) y *Sign up* (crear cuenta).
+
+![Paso 1: GitHub sin sesión](img/github-paso1.jpg)
+
+**Paso 2 · Iniciar sesión.** En la pantalla *Sign in to GitHub* elegí *Continue with Google*, porque mi cuenta ya existe.
+
+![Paso 2: iniciar sesión](img/github-paso2.jpg)
+
+**Paso 3 · Elegir la cuenta de Google.** Google me pidió escoger con qué cuenta entrar a GitHub.
+
+![Paso 3: elegir la cuenta de Google](img/github-paso3.jpg)
+
+**Paso 4 · Sesión iniciada.** Entré al panel de mi cuenta Jeyac. En la lista de repositorios aparece `preprivado---desarrollo-web-`.
+
+![Paso 4: sesión iniciada](img/github-paso4.jpg)
+
+**B · Repositorio**
+
+**Paso 5 · Menú +.** Con el signo **+** de la esquina superior está la opción *New repository*, que sirve para crear un repositorio nuevo.
+
+![Paso 5: menú +](img/github-paso5.jpg)
+
+Mi repositorio se llama `preprivado---desarrollo-web-` (la actividad sugería `registro-taller-desarrollo-web`). Es **público** para que el evaluador lo pueda abrir, y lo creé **vacío**, sin README, .gitignore ni licencia, porque esos archivos ya estaban en la carpeta del proyecto.
+
+**Paso 6 · Repositorio del proyecto.** El repositorio ya tiene los archivos subidos: `server.js`, la carpeta `public`, `README.md`, `bitacora.md` y `.gitignore`.
+
+![Paso 6: repositorio del proyecto](img/github-paso6.jpg)
+
+**Paso 7 · Dirección HTTPS.** Con el botón *Code* → *Clone* → *HTTPS* se copia la dirección del repositorio: `https://github.com/Jeyac/preprivado---desarrollo-web-.git`. Esa es la que usé para conectar mi carpeta con GitHub (`git remote add origin ...`) y subir los commits con `git push`.
+
+![Paso 7: dirección HTTPS](img/github-paso7.jpg)
+
+**D · Comprueba y explica**
+
+- **Archivos en GitHub:** en el repositorio se ven `server.js`, la carpeta `public`, `README.md` y `bitacora.md`. ✅
+- **README:** explica cómo iniciar el proyecto: abrir la carpeta en VS Code, ejecutar `npm install`, después `npm start` y abrir `http://localhost:3000`. ✅
+- **Lo que no se subió:** `node_modules/` no está en GitHub porque está en `.gitignore`. Tampoco hay contraseñas, claves ni archivos `.env`. ✅
+- **URL de entrega:** https://github.com/Jeyac/preprivado---desarrollo-web-
+
+![Actividad 12: ¿Por qué no añades otro README al crear el repositorio?](img/actividad12.png)
+
+**¿Por qué no añades otro README al crear el repositorio?** Porque la carpeta del proyecto ya tiene uno. El repositorio de GitHub tiene que empezar vacío; si GitHub crea su propio README, ya no estaría vacío y al hacer `push` habría un choque entre los dos.
