@@ -306,148 +306,147 @@ En **ancho de teléfono** (390 px, menos de 640 px), se activa el media query: l
 
   **Cambio visual:** cuando la pantalla mide 640 px o menos, el espacio de adentro del formulario se hace más pequeño (de 1.5rem a 1rem). Así los campos quedan más cerca del borde y tienen más lugar en el teléfono.
 
-### Pruebas de manipulación del formulario
+### Pruebas de intrusión del formulario
 
-El 8 de noviembre de 2026 hice 10 pruebas en `http://localhost:3000/` usando la consola del navegador (`F12`). Las capturas las volví a tomar en alta calidad repitiendo cada prueba sobre la versión final del proyecto (por eso la lista ya tiene el botón **Quitar**). La idea era ver qué pasa si alguien cambia el formulario a propósito: quitar validaciones, meter opciones falsas o escribir código en los campos.
+El 8 de noviembre de 2026 hice 11 pruebas (el estado inicial y 10 ataques) en `http://localhost:3000/` usando la consola del navegador (`F12`). La idea era ver qué pasa si alguien cambia el formulario a propósito: quitar validaciones, meter opciones falsas o escribir código en los campos. A cada prueba le puse un nivel de gravedad: **crítico**, **alto**, **medio** o **informativo**.
 
-**Estado inicial del formulario**
+**Estado inicial del formulario [informativo]**
 
-El formulario sin cambios: nombre, correo, taller (6 opciones), teléfono y horario. Todos tienen `required` y el correo es `type="email"`.
+El formulario sin cambios: nombre, correo, taller, teléfono y horario. Todos tienen `required` y el correo es `type="email"`.
 
 ![Estado inicial del formulario](img/seguridad-01.jpg)
 
-**Prueba 1: código en el campo Nombre**
+**Prueba 1: código en el campo Nombre [alto]**
 
 ```js
 document.getElementById("nombre").value = '<script>alert("XSS")</script>';
+document.getElementById("nombre").style.border = "3px solid red";
 ```
 
-Escribí una etiqueta `<script>` en el nombre desde la consola. El campo la acepta como si fuera texto normal.
+Escribí una etiqueta `<script>` en el nombre desde la consola. El borde rojo solo marca el campo que cambié. El campo acepta el texto como si fuera un nombre normal.
 
 ![Prueba 1: código en el campo Nombre](img/seguridad-02.jpg)
 
-**Prueba 2: quitar `required` y poner un correo falso**
+**Prueba 2: quitar las validaciones del navegador [alto]**
 
 ```js
+document.getElementById("correo").type = "text";
 document.getElementById("correo").removeAttribute("required");
-document.getElementById("correo").value = "esto-no-es-email";
+document.getElementById("correo").value = "esto-NO-es-email";
 document.getElementById("nombre").removeAttribute("required");
+document.getElementById("nombre").removeAttribute("minlength");
 ```
 
-Se puede quitar `required` desde la consola. Aun así, el `type="email"` sigue bloqueando el envío normal del navegador.
+Cambié el correo a tipo texto y quité `required` y `minlength`. Así el navegador ya no revisa nada y el correo acepta cualquier texto. Esto demuestra que las validaciones del navegador no bastan solas.
 
-![Prueba 2: quitar required y correo falso](img/seguridad-03.jpg)
+![Prueba 2: quitar las validaciones del navegador](img/seguridad-03.jpg)
 
-**Prueba 3: agregar un taller que no existe**
+**Prueba 3: agregar opciones falsas en las listas [medio]**
 
 ```js
-const select = document.getElementById("taller");
-const fakeOption = document.createElement("option");
-fakeOption.value = "Taller Hackeado";
-fakeOption.textContent = "Taller Hackeado (inyectado)";
-select.appendChild(fakeOption);
-select.value = "Taller Hackeado";
+const opt1 = new Option("HACKEADO (inyectado)", "hack");
+document.getElementById("taller").add(opt1);
+document.getElementById("taller").value = "hack";
+
+const opt2 = new Option("Domingo 3AM (inyectado)", "dom3");
+document.getElementById("horario").add(opt2);
+document.getElementById("horario").value = "dom3";
 ```
 
-Agregué una opción inventada a la lista de talleres y quedó seleccionada.
+Agregué un taller y un horario que no existen, y quedaron seleccionados.
 
-![Prueba 3: taller que no existe](img/seguridad-04.jpg)
+![Prueba 3: opciones falsas en las listas](img/seguridad-04.jpg)
 
-**Prueba 4: caracteres raros en Teléfono**
+**Prueba 4: texto de SQL en Teléfono [alto]**
 
 ```js
 const tel = document.getElementById("telefono");
 tel.setAttribute("type", "text");
 tel.removeAttribute("pattern");
-tel.value = '"><img src=x onerror=alert(1)>';
+tel.value = "0000'; DROP TABLE usuarios;--";
 ```
 
-Cambié el teléfono a tipo texto y escribí una etiqueta `<img>`. El campo lo acepta.
+Cambié el teléfono a tipo texto y escribí una orden de SQL que intentaría borrar una tabla. El campo la acepta.
 
-![Prueba 4: caracteres raros en Teléfono](img/seguridad-05.jpg)
+![Prueba 4: texto de SQL en Teléfono](img/seguridad-05.jpg)
 
-**Prueba 5: agregar un horario que no existe**
-
-```js
-const horario = document.getElementById("horario");
-const fake = document.createElement("option");
-fake.value = "Domingo, 3:00 AM a 5:00 AM";
-fake.textContent = "Domingo - 3:00 a 5:00 AM (inyectado)";
-horario.appendChild(fake);
-horario.value = "Domingo, 3:00 AM a 5:00 AM";
-```
-
-Igual que con el taller, agregué un horario inventado (domingo de 3 a 5 AM) y quedó seleccionado.
-
-![Prueba 5: horario que no existe](img/seguridad-06.jpg)
-
-**Prueba 6: se detecta el correo inválido**
+**Prueba 5: el servidor rechaza el correo inválido [informativo]**
 
 ```js
 document.getElementById("formulario-registro").requestSubmit();
-// Resultado: "El correo no tiene un formato válido."
+// Mensaje del servidor: "El correo no tiene un formato válido."
 ```
 
-Al intentar enviar con el correo `esto-no-es-email`, el navegador **detiene el envío** porque el campo sigue siendo `type="email"`. No aparece ningún mensaje del servidor porque los datos ni siquiera salen de la página, y no se guarda nada.
+Como en la prueba 2 quité las validaciones del navegador, los datos sí llegaron al servidor. El servidor revisó el correo y respondió "El correo no tiene un formato válido.", así que no guardó nada. Esta es la segunda capa de protección: la del servidor.
 
-![Prueba 6: se detecta el correo inválido](img/seguridad-07.jpg)
+![Prueba 5: el servidor rechaza el correo inválido](img/seguridad-06.jpg)
 
-**Prueba 7: todos los campos cambiados**
-
-```js
-document.getElementById("nombre").value = '<img src=x onerror=alert("XSS")>';
-document.getElementById("correo").value = "atacante@malicioso.com";
-document.getElementById("taller").value = "Taller Hackeado";
-document.getElementById("telefono").value = "0000-0000 DROP TABLE users";
-document.getElementById("horario").value = "Domingo, 3:00 AM a 5:00 AM";
-```
-
-Llené todos los campos con valores falsos: código en el nombre, un correo inventado pero bien escrito, el taller y el horario falsos, y un texto de SQL en el teléfono.
-
-![Prueba 7: todos los campos cambiados](img/seguridad-08.jpg)
-
-**Prueba 8: el envío con datos falsos se guarda**
+**Prueba 6: envío con código en el nombre [crítico]**
 
 ```js
+document.getElementById("correo").value = "atacante@sitio-malicioso.com";
+document.getElementById("correo").type = "email";
 document.getElementById("formulario-registro").requestSubmit();
-// Resultado: "Inscripción registrada: <img src=x onerror=alert("XSS")>."
+// Mensaje: "Inscripción registrada: <script>alert("XSS")</script>."
 ```
 
-El formulario se envió y se guardó. El mensaje de confirmación muestra el nombre con la etiqueta, pero como **texto**: no se ejecuta.
+Con un correo inventado pero bien escrito, el registro se guardó con el `<script>` en el nombre. El mensaje lo muestra como **texto**: no se ejecuta.
 
-![Prueba 8: envío con datos falsos](img/seguridad-09.jpg)
+![Prueba 6: envío con código en el nombre](img/seguridad-07.jpg)
 
-**Prueba 9: los datos falsos aparecen en la lista**
+**Prueba 7: la lista muestra el registro falso [alto]**
 
-La lista de participantes muestra el registro con el nombre raro, el taller falso y el horario falso. Las etiquetas se ven como texto y **no se ejecutan**, porque `app.js` usa `textContent` en lugar de `innerHTML`.
+La lista de participantes muestra el registro con el nombre raro, el taller falso y el horario falso. La etiqueta se ve como texto y **no se ejecuta**, porque `app.js` usa `textContent` en lugar de `innerHTML`.
 
-![Prueba 9: datos falsos en la lista](img/seguridad-10.jpg)
+![Prueba 7: la lista muestra el registro falso](img/seguridad-08.jpg)
 
-**Prueba 10: cambiar los textos de la página**
+**Prueba 8: cambiar los textos de la página [medio]**
 
 ```js
-document.querySelector("h1").textContent = "Registro HACKEADO";
-document.querySelector(".etiqueta").textContent = "Sitio Comprometido - Prueba de seguridad";
-document.querySelector("#titulo-formulario").textContent = "Datos alterados";
+document.querySelector("h1").textContent = "SITIO COMPROMETIDO";
+document.querySelector("h1").style.color = "#cc0000";
+document.querySelector(".etiqueta").textContent = "ALERTA DE SEGURIDAD - PRUEBA DE INTRUSION";
+document.querySelector("#titulo-formulario").textContent = "Formulario alterado por atacante";
 ```
 
-Cambié el título y otros textos. Ese cambio solo se ve en **mi** navegador y se borra al recargar la página; las demás personas siguen viendo la página normal.
+Cambié el título y otros textos. Este cambio solo se ve en **mi** navegador y se borra al recargar la página; las demás personas siguen viendo la página normal.
 
-![Prueba 10: cambiar los textos de la página](img/seguridad-11.jpg)
+![Prueba 8: cambiar los textos de la página](img/seguridad-09.jpg)
+
+**Prueba 9: segundo registro con otro código [crítico]**
+
+```js
+document.getElementById("nombre").value = '<img src=x onerror=alert(document.cookie)>';
+document.getElementById("correo").value = "hacker2@evil.net";
+document.getElementById("formulario-registro").requestSubmit();
+```
+
+Hice otro registro con una etiqueta `<img>` que intentaría leer las cookies del navegador. También se guardó, y también se muestra solo como texto.
+
+![Prueba 9: segundo registro con otro código](img/seguridad-10.jpg)
+
+**Prueba 10: la lista con los dos registros falsos [alto]**
+
+La lista muestra los dos registros con código en el nombre. Ninguno se ejecuta, pero los dos quedaron guardados, y nada impide hacer muchos registros seguidos.
+
+![Prueba 10: la lista con los dos registros falsos](img/seguridad-11.jpg)
 
 **Lo que aprendí**
 
 1. Todo lo del navegador (`required`, `type="email"`, las opciones de las listas) se puede cambiar desde la consola. Por eso el servidor tiene que revisar los datos otra vez.
-2. Mi servidor **sí** revisa que no falten campos, que el correo esté bien escrito y que haya cupo. Si alguien lograra mandar el correo falso de la prueba 6 saltándose el navegador, el servidor lo rechazaría con un error 400.
-3. Lo que el servidor **todavía no** revisa es que el taller y el horario sean de la lista real. Por eso se guardaron "Taller Hackeado" y el horario del domingo.
-4. Las etiquetas como `<script>` no se ejecutan porque la página usa `textContent`, que las muestra como texto.
+2. Mi servidor **sí** revisa que no falten campos, que el correo esté bien escrito y que haya cupo. Por eso en la prueba 5 rechazó el correo falso aunque ya no había validación en el navegador.
+3. Lo que el servidor **todavía no** revisa es que el taller y el horario sean de la lista real, ni que el nombre traiga etiquetas. Por eso se guardaron los registros de las pruebas 6 y 9.
+4. Las etiquetas como `<script>` e `<img>` no se ejecutan porque la página usa `textContent`, que las muestra como texto.
 5. El texto "DROP TABLE" no hace daño en este proyecto porque todavía no hay base de datos; los registros se guardan en un arreglo. Cuando se use SQL, hay que usar consultas preparadas.
+6. Hoy se pueden hacer muchos registros seguidos. El límite de 20 cupos ayuda un poco, pero no evita que alguien llene la lista con datos falsos.
 
 **Recomendaciones**
 
 1. Revisar en el servidor que el taller y el horario estén en la lista permitida.
-2. Seguir usando `textContent` para mostrar datos, nunca `innerHTML`.
-3. Cuando se use una base de datos, usar consultas preparadas para evitar SQL Injection.
+2. Rechazar o limpiar en el servidor los nombres que traigan etiquetas como `<` y `>`.
+3. Seguir usando `textContent` para mostrar datos, nunca `innerHTML`.
+4. Cuando se use una base de datos, usar consultas preparadas para evitar SQL Injection.
+5. Limitar cuántos registros se pueden enviar seguidos desde la misma computadora.
 
 ## Actividad 5
 
