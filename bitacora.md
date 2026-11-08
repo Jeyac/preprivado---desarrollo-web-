@@ -964,11 +964,11 @@ Quiere decir **"Creado"**: el servidor recibió los datos bien y guardó algo nu
 
 ### Ejercicio SQL · SQLite Fiddle
 
-Hice el ejercicio en sqlite.org/fiddle, paso por paso.
+Hice el ejercicio en sqlite.org/fiddle con tres ejemplos de cada sentencia: 3 CREATE TABLE, 3 INSERT, 3 SELECT, 3 UPDATE y 3 DELETE.
 
-**Paso 1 · CREATE TABLE e INSERT**
+**Paso 1 · CREATE 1 · Crear la tabla talleres**
 
-Creé la tabla `talleres` con tres columnas: `id` (clave primaria), `nombre` y `horario`. Después agregué el taller "Desarrollo Web" en horario "Tarde".
+Creé la tabla `talleres` con tres columnas: `id` (clave primaria), `nombre` y `horario`. La consulta final muestra las tablas que existen: solo `talleres`.
 
 ```sql
 CREATE TABLE talleres (
@@ -976,52 +976,185 @@ CREATE TABLE talleres (
   nombre TEXT NOT NULL,
   horario TEXT
 );
+```
 
+![Paso 1: CREATE 1 · Crear la tabla talleres](img/sql-paso01.jpg)
+
+**Paso 2 · CREATE 2 · Crear la tabla estudiantes**
+
+Creé la tabla `estudiantes` con `id`, `nombre` y `correo`. Ahora ya hay dos tablas.
+
+```sql
+CREATE TABLE estudiantes (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  correo TEXT
+);
+```
+
+![Paso 2: CREATE 2 · Crear la tabla estudiantes](img/sql-paso02.jpg)
+
+**Paso 3 · CREATE 3 · Crear la tabla instructores**
+
+Creé la tabla `instructores` con `id`, `nombre` y `especialidad`. Ya son tres tablas.
+
+```sql
+CREATE TABLE instructores (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  especialidad TEXT
+);
+```
+
+![Paso 3: CREATE 3 · Crear la tabla instructores](img/sql-paso03.jpg)
+
+**Paso 4 · INSERT 1 · Desarrollo Web**
+
+Agregué el taller "Desarrollo Web" en horario "Tarde". Recibió el id 1.
+
+```sql
 INSERT INTO talleres (nombre, horario)
 VALUES ('Desarrollo Web', 'Tarde');
 ```
 
-![Paso 1: CREATE TABLE e INSERT](img/sql-paso1.jpg)
+![Paso 4: INSERT 1 · Desarrollo Web](img/sql-paso04.jpg)
 
-**Paso 2 · SELECT**
+**Paso 5 · INSERT 2 · Bases de Datos**
 
-Consulté la tabla. Devolvió las columnas id, nombre y horario con la fila: `1 | Desarrollo Web | Tarde`.
+Agregué "Bases de Datos" en horario "Mañana". Recibió el id 2.
+
+```sql
+INSERT INTO talleres (nombre, horario)
+VALUES ('Bases de Datos', 'Mañana');
+```
+
+![Paso 5: INSERT 2 · Bases de Datos](img/sql-paso05.jpg)
+
+**Paso 6 · INSERT 3 · Redes**
+
+Agregué "Redes" en horario "Noche". Recibió el id 3. La tabla ya tiene tres talleres.
+
+```sql
+INSERT INTO talleres (nombre, horario)
+VALUES ('Redes', 'Noche');
+```
+
+![Paso 6: INSERT 3 · Redes](img/sql-paso06.jpg)
+
+**Paso 7 · SELECT 1 · Todas las columnas**
+
+Consulté todos los talleres con sus tres columnas.
 
 ```sql
 SELECT id, nombre, horario FROM talleres;
 ```
 
-![Paso 2: SELECT](img/sql-paso2.jpg)
+![Paso 7: SELECT 1 · Todas las columnas](img/sql-paso07.jpg)
 
-**Paso 3 · UPDATE y volver a consultar**
+**Paso 8 · SELECT 2 · Con WHERE**
 
-Cambié el horario del taller con id 1 a "Mañana". Al consultar otra vez se ve el cambio.
+Con `WHERE` pedí solo los talleres de la tarde. Salió únicamente "Desarrollo Web".
 
 ```sql
-UPDATE talleres SET horario = 'Mañana' WHERE id = 1;
-SELECT id, nombre, horario FROM talleres;
+SELECT nombre, horario FROM talleres
+WHERE horario = 'Tarde';
 ```
 
-![Paso 3: UPDATE y volver a consultar](img/sql-paso3.jpg)
+![Paso 8: SELECT 2 · Con WHERE](img/sql-paso08.jpg)
 
-**Paso 4 · DELETE y volver a consultar**
+**Paso 9 · SELECT 3 · Ordenado por nombre**
 
-Borré la fila con id 1. Después del DELETE, la consulta ya no devuelve filas y `COUNT(*)` da 0.
+Con `ORDER BY` ordené los talleres por nombre, de la A a la Z: Bases de Datos, Desarrollo Web y Redes.
 
 ```sql
-DELETE FROM talleres WHERE id = 1;
-SELECT id, nombre, horario FROM talleres;
+SELECT id, nombre FROM talleres
+ORDER BY nombre ASC;
+```
+
+![Paso 9: SELECT 3 · Ordenado por nombre](img/sql-paso09.jpg)
+
+**Paso 10 · UPDATE 1 · Horario de Desarrollo Web**
+
+Cambié el horario de Desarrollo Web (id 1) a "Mañana".
+
+```sql
+UPDATE talleres
+SET horario = 'Mañana'
+WHERE id = 1;
+```
+
+![Paso 10: UPDATE 1 · Horario de Desarrollo Web](img/sql-paso10.jpg)
+
+**Paso 11 · UPDATE 2 · Horario de Bases de Datos**
+
+Cambié el horario de Bases de Datos (id 2) a "Noche".
+
+```sql
+UPDATE talleres
+SET horario = 'Noche'
+WHERE id = 2;
+```
+
+![Paso 11: UPDATE 2 · Horario de Bases de Datos](img/sql-paso11.jpg)
+
+**Paso 12 · UPDATE 3 · Nombre de Redes**
+
+Cambié el nombre del taller con id 3 a "Redes y Telecomunicaciones".
+
+```sql
+UPDATE talleres
+SET nombre = 'Redes y Telecomunicaciones'
+WHERE id = 3;
+```
+
+![Paso 12: UPDATE 3 · Nombre de Redes](img/sql-paso12.jpg)
+
+**Paso 13 · DELETE 1 · Eliminar el id 1**
+
+Borré la fila con id 1 (Desarrollo Web). Quedan Bases de Datos y Redes y Telecomunicaciones.
+
+```sql
+DELETE FROM talleres
+WHERE id = 1;
+```
+
+![Paso 13: DELETE 1 · Eliminar el id 1](img/sql-paso13.jpg)
+
+**Paso 14 · DELETE 2 · Eliminar el id 2**
+
+Borré la fila con id 2 (Bases de Datos). Solo queda Redes y Telecomunicaciones.
+
+```sql
+DELETE FROM talleres
+WHERE id = 2;
+```
+
+![Paso 14: DELETE 2 · Eliminar el id 2](img/sql-paso14.jpg)
+
+**Paso 15 · DELETE 3 · Eliminar el id 3**
+
+Borré la última fila (id 3). Con `COUNT(*)` comprobé que la tabla quedó vacía: 0 filas.
+
+```sql
+DELETE FROM talleres
+WHERE id = 3;
 SELECT COUNT(*) AS filas_restantes FROM talleres;
 ```
 
-![Paso 4: DELETE y volver a consultar](img/sql-paso4.jpg)
+![Paso 15: DELETE 3 · Eliminar el id 3](img/sql-paso15.jpg)
 
-**¿Qué fila desapareció?** La fila con id 1: el taller "Desarrollo Web" con horario "Mañana" (ya cambiado por el UPDATE). Como era la única fila, la tabla quedó vacía.
+**¿Qué filas desaparecieron?**
+
+- Con el DELETE 1 desapareció la fila con id 1: "Desarrollo Web".
+- Con el DELETE 2 desapareció la fila con id 2: "Bases de Datos".
+- Con el DELETE 3 desapareció la fila con id 3: "Redes y Telecomunicaciones".
+
+Al final la tabla `talleres` quedó vacía: `COUNT(*)` dio 0.
 
 **DDL y DML**
 
 - **DDL (Lenguaje de Definición de Datos):** sirve para crear o cambiar la **estructura** de la base de datos, es decir, cómo son las tablas.
-  Ejemplo: `CREATE TABLE talleres (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL, horario TEXT);` crea la tabla y dice qué columnas tiene.
+  Ejemplo: `CREATE TABLE talleres (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL, horario TEXT);` crea la tabla y dice qué columnas tiene. En el ejercicio también creé así las tablas `estudiantes` e `instructores`.
 - **DML (Lenguaje de Manipulación de Datos):** sirve para trabajar con los **datos** que hay dentro de las tablas: agregarlos, leerlos, cambiarlos o borrarlos.
   Ejemplo: `INSERT INTO talleres (nombre, horario) VALUES ('Desarrollo Web', 'Tarde');` agrega un taller. También son DML `SELECT`, `UPDATE` y `DELETE`.
 
