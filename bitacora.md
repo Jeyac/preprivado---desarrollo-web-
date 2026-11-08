@@ -231,6 +231,18 @@ El archivo `styles.css` no tenía la regla, así que la agregué al final:
 
 Esto quiere decir que, cuando la pantalla mide 640 px o menos (como un teléfono), los espacios se hacen más pequeños para que el formulario tenga más lugar. Al reducir el ancho del navegador, los bordes del formulario y de los paneles quedan más cerca de los campos.
 
+**Prueba en ancho normal y angosto**
+
+Probé la página en los dos anchos para comprobar el media query.
+
+En **ancho normal** (computadora), el formulario y la lista ocupan todo el panel y el botón **Quitar** queda a la derecha de cada participante:
+
+![Proyecto en ancho normal](img/final-ancho-normal.png)
+
+En **ancho de teléfono** (390 px, menos de 640 px), se activa el media query: los espacios se hacen más pequeños, los campos ocupan todo el ancho y el botón **Quitar** baja debajo del nombre. Todo se sigue leyendo bien y nada se sale de la pantalla:
+
+![Proyecto en ancho de teléfono](img/final-ancho-telefono.png)
+
 **Comprueba antes de continuar**
 
 ![Actividad 4: comprueba antes de continuar](img/actividad4-comprueba.png)
