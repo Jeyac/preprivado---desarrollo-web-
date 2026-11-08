@@ -1244,9 +1244,9 @@ Mi repositorio se llama `preprivado---desarrollo-web-` (la actividad sugería `r
 
 **D · Comprueba y explica**
 
-- **Archivos en GitHub:** en el repositorio se ven `server.js`, la carpeta `public`, `README.md` y `bitacora.md`. ✅
-- **README:** explica cómo iniciar el proyecto: abrir la carpeta en VS Code, ejecutar `npm install`, después `npm start` y abrir `http://localhost:3000`. ✅
-- **Lo que no se subió:** `node_modules/` no está en GitHub porque está en `.gitignore`. Tampoco hay contraseñas, claves ni archivos `.env`. ✅
+- **Archivos en GitHub:** en el repositorio se ven `server.js`, la carpeta `public`, `README.md` y `bitacora.md`.
+- **README:** explica cómo iniciar el proyecto: abrir la carpeta en VS Code, ejecutar `npm install`, después `npm start` y abrir `http://localhost:3000`.
+- **Lo que no se subió:** `node_modules/` no está en GitHub porque está en `.gitignore`. Tampoco hay contraseñas, claves ni archivos `.env`. 
 - **URL de entrega:** https://github.com/Jeyac/preprivado---desarrollo-web-
 
 ![Actividad 12: ¿Por qué no añades otro README al crear el repositorio?](img/actividad12.png)
@@ -1376,11 +1376,11 @@ El botón es rojo para que se note que borra. En pantalla ancha va a la derecha 
 
 **Pruebas de la extensión:**
 
-- `DELETE /api/inscripciones/1` con un id que existe → **200** "Inscripción de Ana López eliminada." ✅
-- El mismo `DELETE` otra vez → **404** "No existe una inscripción con ese id." ✅
-- `DELETE /api/inscripciones/abc` → **404** ✅
-- Después de borrar, un registro nuevo recibe un `id` nuevo (3) y no repite uno anterior. ✅
-- Al presionar **Quitar** en la página, aparece el mensaje y el participante desaparece de la lista sin recargar. ✅
+- `DELETE /api/inscripciones/1` con un id que existe → **200** "Inscripción de Ana López eliminada." 
+- El mismo `DELETE` otra vez → **404** "No existe una inscripción con ese id." 
+- `DELETE /api/inscripciones/abc` → **404** 
+- Después de borrar, un registro nuevo recibe un `id` nuevo (3) y no repite uno anterior. 
+- Al presionar **Quitar** en la página, aparece el mensaje y el participante desaparece de la lista sin recargar. 
 
 **Capturas del proyecto terminado** (con dos participantes inventados):
 
@@ -1393,3 +1393,130 @@ Ancho de teléfono (390 px):
 ![Proyecto final en ancho de teléfono](img/final-ancho-telefono.png)
 
 **URL de entrega:** https://github.com/Jeyac/preprivado---desarrollo-web-
+
+## Versión final · Base de datos SQLite
+
+En la versión final dejé de guardar las inscripciones en un arreglo y ahora se guardan en una base de datos **SQLite**. Usé el módulo `node:sqlite` que ya viene con Node.js (yo tengo la versión 26), así que no tuve que instalar un servidor de base de datos.
+
+### 1. Campos nuevos y columnas
+
+Agregué dos campos al formulario, los dos con `<select>`:
+
+| Campo | Opciones | Por qué tiene sentido |
+|---|---|---|
+| `modalidad` | Presencial, Virtual, Híbrida | Así el taller sabe cuántas personas van a ir al salón y cuántas se conectan. |
+| `nivel_experiencia` | Inicial, Intermedio, Avanzado | Ayuda a preparar el contenido según lo que ya saben los participantes. |
+
+El nombre es el mismo en todas las capas: el `name` del HTML, el objeto que manda `fetch`, la validación de Express, la columna de SQLite y el `INSERT`/`UPDATE`.
+
+### 2. Conexión con la base (`database.js`)
+
+```js
+const { DatabaseSync } = require("node:sqlite");
+const db = new DatabaseSync(path.join(__dirname, "registro_taller.db"));
+
+db.exec(
+  "CREATE TABLE IF NOT EXISTS inscripciones (" +
+    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "nombre TEXT NOT NULL, correo TEXT NOT NULL, telefono TEXT NOT NULL, " +
+    "taller TEXT NOT NULL, horario TEXT NOT NULL, " +
+    "modalidad TEXT NOT NULL, nivel_experiencia TEXT NOT NULL, " +
+    "fecha_registro TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)"
+);
+```
+
+- `DatabaseSync` abre `registro_taller.db` o lo crea si no existe.
+- `CREATE TABLE IF NOT EXISTS` crea la tabla solo la primera vez.
+- `AUTOINCREMENT` le da un id nuevo a cada inscripción, aunque se borren otras.
+- `DEFAULT CURRENT_TIMESTAMP` guarda la fecha y hora sola. SQLite la guarda en hora UTC, por eso en `app.js` la convierto a la hora local antes de mostrarla.
+
+Agregué `registro_taller.db`, `registro_taller.db-shm` y `registro_taller.db-wal` al `.gitignore` para no subir la base a GitHub.
+
+### 3. API con GET, POST, PUT y DELETE
+
+| Método y ruta | Qué hace |
+|---|---|
+| `GET /api/inscripciones` | `SELECT` de todas las filas, de la más nueva a la más vieja. |
+| `POST /api/inscripciones` | Valida y hace `INSERT`. Responde **201**. |
+| `PUT /api/inscripciones/:id` | Valida y hace `UPDATE ... WHERE id = ?`. Si `changes` es 0 responde **404**. |
+| `DELETE /api/inscripciones/:id` | `DELETE ... WHERE id = ?`. Si `changes` es 0 responde **404**. |
+| `GET /api/reportes/resumen` | Conteos con `COUNT(*)` y `GROUP BY`. |
+
+Todas las consultas usan `?` (sentencias preparadas). Así el texto que escribe la persona nunca se pega dentro del SQL y no se puede hacer inyección SQL.
+
+Como POST y PUT validan lo mismo, hice una sola función `validarInscripcion` que usan las dos rutas. También conservé la lógica de cupos de la Actividad 5, pero ahora cuenta las filas con `SELECT COUNT(*)` en vez de usar `inscripciones.length`.
+
+### 4. Validaciones en el navegador y en Express
+
+| Qué valido | En el navegador | En Express |
+|---|---|---|
+| Campos obligatorios | `required` | Rechaza vacíos o solo espacios |
+| Nombre | `minlength="2"`, `maxlength="80"` | Entre 2 y 80 caracteres |
+| Correo | `type="email"` | Expresión regular `texto@texto.texto` |
+| Teléfono | `pattern` | Entre 8 y 15 dígitos |
+| Selects | Solo se puede escoger una opción de la lista | Revisa que el valor esté en la lista de opciones permitidas |
+
+La validación del navegador ayuda a la persona, pero el servidor también tiene que revisar porque alguien puede mandar datos directo a la API sin usar el formulario. Si el servidor rechaza algo, el mensaje aparece en rojo y los datos se quedan en el formulario para corregirlos.
+
+### 5. Editar y eliminar desde la página
+
+- Cada tarjeta de la lista tiene los botones **Editar** y **Eliminar**.
+- **Editar** copia los datos de la fila al formulario, cambia el título a "Editando la inscripción de …" y el botón a **Guardar cambios**. Al enviar, `fetch` usa `method: "PUT"` con el id en la ruta. **Cancelar edición** regresa el formulario a modo de registro.
+- **Eliminar** pide confirmación y después manda `fetch` con `method: "DELETE"`.
+- Después de crear, editar o eliminar, vuelvo a llamar `cargarInscripciones()` y `cargarReportes()` para que la lista y los reportes muestren lo que hay en la base.
+
+### 6. Reportes
+
+El apartado **Reportes** carga `GET /api/reportes/resumen` y muestra:
+
+- Una tarjeta con el **total** de inscripciones y los cupos que quedan.
+- Barras por **taller**, por **horario**, por **modalidad** y por **experiencia previa**. La barra del grupo con más inscripciones mide 100 % y las demás son proporcionales.
+- Si no hay registros, cada tarjeta dice "Todavía no hay inscripciones para reportar".
+
+Los valores se ponen con `textContent`, no con `innerHTML`.
+
+### 7. CSS y diseño adaptable
+
+- El formulario usa `.formulario-grid` con dos columnas, y cada etiqueta con su control va dentro de un `div.campo`.
+- Los reportes usan `.resumen` con dos columnas, y la tarjeta del total ocupa todo el ancho.
+- En pantallas de 640 px o menos, el formulario, la lista y los reportes pasan a una sola columna y los botones ocupan todo el ancho.
+
+### 8. Pruebas
+
+Hice las pruebas con siete participantes inventados.
+
+| Prueba | Qué hice | Resultado |
+|---|---|---|
+| Crear | `POST` con datos válidos | **201** "Inscripción de Ana López guardada." y aparece en la lista y en los reportes |
+| Leer | Abrí `/api/inscripciones` | Devuelve las filas de la base con `fecha_registro` |
+| Actualizar | **Editar** a Diego Hernández, cambié modalidad a Híbrida y experiencia a Intermedio | "Inscripción de Diego Hernández actualizada." Cambió en la lista, en la base y en el reporte de modalidad |
+| Actualizar un id que no existe | `PUT /api/inscripciones/999` | **404** "No se encontró la inscripción." |
+| Eliminar | `DELETE` de un registro | **200** "Inscripción eliminada." y desaparece de la lista |
+| Eliminar otra vez | El mismo `DELETE` | **404** "No se encontró la inscripción." |
+| Id inválido | `DELETE /api/inscripciones/abc` | **400** "Id inválido." |
+| Correo inválido | `luis-sin-arroba` | **400** y no se guardó |
+| Campo vacío | `modalidad` con solo espacios | **400** "Completa todos los campos." |
+| Opción no permitida | `taller: "Cocina"` | **400** "Selecciona un valor válido en taller." |
+| Teléfono corto | `123` | **400** "El teléfono debe tener entre 8 y 15 dígitos." |
+| JSON roto | Cuerpo `{nombre:` | **400** "El cuerpo de la solicitud no es un JSON válido." |
+| Persistencia | Detuve el servidor y lo volví a iniciar | Las 7 inscripciones siguen ahí |
+| Reporte | Comparé `/api/reportes/resumen` con la lista | Total 7. JavaScript tiene 3 (Ana, María José y Jorge), igual que en la lista |
+| Diseño | Revisé la página en escritorio y a 375 px | En teléfono queda en una columna y no se sale de la pantalla |
+
+### 9. Capturas de la versión final
+
+Ancho de escritorio (formulario, lista con acciones y reportes):
+
+![Versión final con SQLite en ancho de escritorio](img/sqlite-escritorio.png)
+
+Ancho de teléfono:
+
+![Versión final con SQLite en ancho de teléfono](img/sqlite-telefono.png)
+
+### 10. Preguntas para explicar
+
+- **¿Cómo llega un dato del formulario a la base?** El `submit` arma un objeto con `new FormData`, `fetch` lo manda como JSON a Express, `express.json()` lo convierte en `req.body`, `validarInscripcion` lo limpia y lo revisa, y `db.prepare(...).run(...)` lo guarda con un `INSERT`.
+- **¿Qué diferencia hay entre GET, POST, PUT y DELETE?** GET solo consulta, POST crea un registro nuevo, PUT cambia uno que ya existe (indicado por su id) y DELETE lo borra.
+- **¿Cómo comprobé que los datos persisten?** Detuve el servidor, lo volví a iniciar y la lista seguía con las mismas 7 inscripciones, porque están en el archivo `registro_taller.db` y no en la memoria.
+- **¿Qué consultas alimentan los reportes?** `SELECT COUNT(*) AS total FROM inscripciones` y `SELECT columna, COUNT(*) AS cantidad FROM inscripciones GROUP BY columna` para taller, horario, modalidad y nivel de experiencia.
+- **¿Qué valido en el navegador y qué en Express?** En el navegador: campos obligatorios, formato de correo, longitud y patrón del teléfono. En Express repito todo eso y además reviso que cada select tenga una opción permitida y que todavía haya cupo.
