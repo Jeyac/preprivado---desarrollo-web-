@@ -1054,3 +1054,71 @@ Mi repositorio se llama `preprivado---desarrollo-web-` (la actividad sugería `r
 ![Actividad 12: ¿Por qué no añades otro README al crear el repositorio?](img/actividad12.png)
 
 **¿Por qué no añades otro README al crear el repositorio?** Porque la carpeta del proyecto ya tiene uno. El repositorio de GitHub tiene que empezar vacío; si GitHub crea su propio README, ya no estaría vacío y al hacer `push` habría un choque entre los dos.
+
+### Cuestionarios · Frontend y Backend
+
+Resolví los dos cuestionarios del repaso. Saqué **7 de 7** en Frontend y **8 de 8** en Backend, datos y Git.
+
+**Cuestionario · Frontend (HTML, CSS y JavaScript)**
+
+**1. ¿Qué tecnología define la estructura y el significado del contenido?** HTML. Organiza y describe el contenido de la página.
+
+![Frontend, pregunta 1](img/quiz-01.png)
+
+**2. ¿Qué conecta una etiqueta label con su campo?** El `for` del label con el mismo `id` del campo.
+
+![Frontend, pregunta 2](img/quiz-02.png)
+
+**3. ¿Qué combinación marca un campo obligatorio que debe parecerse a un correo?** `type="email"` y `required`.
+
+![Frontend, pregunta 3](img/quiz-03.png)
+
+**4. ¿Qué selector aplica a class=tarjeta?** `.tarjeta`. La clase se elige con punto; el id, con `#`.
+
+![Frontend, pregunta 4](img/quiz-04.png)
+
+**5. ¿Cuándo se activa @media (max-width: 640px)?** Cuando el ancho de la pantalla es de 640 px o menos.
+
+![Frontend, pregunta 5](img/quiz-05.png)
+
+**6. ¿Qué hace addEventListener?** Escucha un evento (como submit o click) y ejecuta una función.
+
+![Frontend, pregunta 6](img/quiz-06.png)
+
+**7. ¿Para qué se usa preventDefault() en el evento submit?** Para que el navegador no recargue la página y JavaScript maneje los datos.
+
+![Frontend, pregunta 7](img/quiz-07.png)
+
+**Cuestionario · Backend, datos y Git**
+
+**1. ¿Qué es Node.js?** Un entorno para ejecutar JavaScript en el servidor, fuera del navegador.
+
+![Backend, pregunta 1](img/quiz-08.png)
+
+**2. ¿Qué hace npm install?** Instala las dependencias del proyecto que están en `package.json`.
+
+![Backend, pregunta 2](img/quiz-09.png)
+
+**3. ¿Qué método suele servir para consultar inscripciones?** GET. Sirve para pedir datos; POST, para enviarlos.
+
+![Backend, pregunta 3](img/quiz-10.png)
+
+**4. ¿Qué permite hacer express.json()?** Leer el JSON que llega al servidor, en `req.body`.
+
+![Backend, pregunta 4](img/quiz-11.png)
+
+**5. ¿Qué estado HTTP responde normalmente al crear una inscripción?** 201, que significa "Creado".
+
+![Backend, pregunta 5](img/quiz-12.png)
+
+**6. ¿Qué sentencia consulta filas de una tabla?** SELECT.
+
+![Backend, pregunta 6](img/quiz-13.png)
+
+**7. ¿Qué hace git push?** Envía los commits de mi computadora al repositorio de GitHub.
+
+![Backend, pregunta 7](img/quiz-14.png)
+
+**8. ¿Cuál es la diferencia más precisa entre Git y GitHub?** Git guarda las versiones del proyecto en mi computadora; GitHub guarda los repositorios en internet para compartirlos.
+
+![Backend, pregunta 8](img/quiz-15.png)
