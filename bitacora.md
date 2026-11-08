@@ -981,3 +981,27 @@ En resumen: `add` elige, `commit` guarda en mi computadora y `push` lo sube a Gi
 **¿Qué información comunica un buen mensaje de commit?**
 
 Un buen mensaje dice **qué cambió** de forma corta y clara, para que cualquiera (o yo en el futuro) entienda ese cambio sin abrir los archivos. Por ejemplo, "Completa formulario y estilos" dice mucho más que "cambios" o "arreglos". Lo ideal es empezar con un verbo (Agrega, Corrige, Completa) y hablar de un solo cambio por commit.
+
+### Tu ejercicio · tres cambios, tres commits
+
+Ejecuté `git init` dentro de la carpeta `registro-taller-estudiante` para que el proyecto tenga su propio repositorio. Git ya tenía configurado mi nombre, así que no tuve que usar `git config`. Hice tres commits, uno por cada etapa del proyecto:
+
+**Commit 1 · "Agrega estructura inicial del proyecto"**
+
+Guarda los archivos base: `.gitignore`, `README.md`, `package.json`, `package-lock.json` y `server.js`. Con `git status --short` se ve que estos archivos están listos (`A`) y que los demás todavía no se eligieron (`??`).
+
+![Commit 1: estructura inicial](img/git-commit1.png)
+
+**Commit 2 · "Completa formulario y estilos"**
+
+Guarda el HTML y el CSS: `public/index.html` y `public/styles.css`.
+
+![Commit 2: formulario y estilos](img/git-commit2.png)
+
+**Commit 3 · "Agrega JavaScript, API con validaciones y bitácora"**
+
+Guarda lo que faltaba: `public/app.js`, la bitácora y sus imágenes. Al final, `git log --oneline` muestra los tres commits y `git status` dice que no queda nada pendiente.
+
+![Commit 3: JavaScript, API y bitácora](img/git-commit3.png)
+
+Los avisos amarillos (`LF will be replaced by CRLF`) no son errores: Git solo avisa que en Windows los saltos de línea se guardan de otra forma.
