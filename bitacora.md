@@ -1151,28 +1151,13 @@ Resolví los dos cuestionarios del repaso. Saqué **7 de 7** en Frontend y **8 d
 
 ## Proyecto final
 
-### Verificación de la lista del proyecto
+### Verificación
 
-Revisé cada punto del plan de trabajo y de la lista de control en el proyecto:
+![Casos de prueba y entrega](img/final-casos-prueba.png)
 
-- **Inicio (0–5 min):** `npm install` y `npm start` funcionan, y `localhost:3000` carga la página. ✅
-- **HTML (5–15 min):** el formulario tiene los cinco campos. Teléfono es `type="tel"`, correo es `type="email"`, taller y horario son listas. Cada `label` tiene un `for` igual al `id` de su campo, y todos llevan `required`. ✅
-- **CSS (15–25 min):** el formulario y la lista usan **Grid** (`display: grid`), las tarjetas de la lista usan **Flexbox** y hay un media query para pantallas de 640 px o menos. ✅
-- **POST en `server.js` (25–40 min):** lee los cinco valores, revisa que no falten y que el correo sea válido, crea un `id` y guarda el registro en el arreglo. Responde **201** al guardar y **400** si los datos están mal. ✅
-- **`app.js` (40–52 min):** usa `preventDefault()` para no recargar, envía los datos con `fetch` en JSON, muestra el mensaje del servidor y dibuja la lista con `textContent`. ✅
-- **README (52–58 min):** antes era el de la plantilla. Lo completé con el objetivo, la instalación, cómo iniciar, la tabla de rutas de la API y cómo probar GET, POST y DELETE. ✅
-- **Git y GitHub (58–65 min):** hay más de tres commits descriptivos, `.gitignore` excluye `node_modules/` y `.env`, y todo está subido a GitHub. ✅
+![Defensa oral, autoevaluación final y resultado de los cuestionarios](img/final-autoevaluacion.png)
 
-**Casos de prueba:**
-
-| Caso | Resultado |
-|---|---|
-| Envío válido | Responde 201 y el registro aparece en la lista sin recargar la página. ✅ |
-| Campo vacío | El navegador avisa por el `required`; si llega vacío al servidor, responde 400 "Completa todos los campos." ✅ |
-| Correo inválido | Responde 400 "El correo no tiene un formato válido." y no se guarda. ✅ |
-| Ancho de teléfono | A 390 px todo se lee bien y nada se sale de la pantalla (captura abajo). ✅ |
-
-**Una corrección que hice:** el `id` se calculaba con `inscripciones.length + 1`. Si se borra un registro, el siguiente podía repetir un `id` que ya existía. Lo cambié por un contador (`siguienteId`) que siempre sube, así cada registro tiene un `id` único.
+![Repositorio en GitHub](img/final-repositorio.png)
 
 ### Extensión · Quitar una inscripción
 
