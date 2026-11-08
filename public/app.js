@@ -16,13 +16,32 @@ async function cargarInscripciones() {
     return;
   }
 
-  // Cada participante se muestra como una tarjeta.
+  // Cada participante se muestra como una tarjeta con un botón para quitarlo.
   for (const inscripcion of inscripciones) {
     const item = document.createElement("li");
     item.className = "tarjeta";
-    item.textContent = `${inscripcion.nombre} · ${inscripcion.taller} · ${inscripcion.horario}`;
+
+    const texto = document.createElement("span");
+    texto.textContent = `${inscripcion.nombre} · ${inscripcion.taller} · ${inscripcion.horario}`;
+
+    const botonQuitar = document.createElement("button");
+    botonQuitar.type = "button";
+    botonQuitar.className = "boton-quitar";
+    botonQuitar.textContent = "Quitar";
+    botonQuitar.setAttribute("aria-label", `Quitar la inscripción de ${inscripcion.nombre}`);
+    botonQuitar.addEventListener("click", () => quitarInscripcion(inscripcion.id));
+
+    item.append(texto, botonQuitar);
     lista.append(item);
   }
+}
+
+// Extensión: pide al servidor que borre la inscripción y vuelve a dibujar la lista.
+async function quitarInscripcion(id) {
+  const respuesta = await fetch(`/api/inscripciones/${id}`, { method: "DELETE" });
+  const resultado = await respuesta.json();
+  mensaje.textContent = resultado.mensaje;
+  cargarInscripciones();
 }
 
 formulario.addEventListener("submit", async (evento) => {

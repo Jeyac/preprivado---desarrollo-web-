@@ -6,6 +6,9 @@ const PORT = 3000;
 // Este arreglo guarda los registros solo mientras el servidor está activo.
 const inscripciones = [];
 
+// Contador para que cada registro tenga un id único, aunque se borren registros.
+let siguienteId = 1;
+
 // Lógica de cupos (Actividad 5): el taller acepta como máximo 20 personas.
 const cuposMaximos = 20;
 
@@ -42,7 +45,7 @@ app.post("/api/inscripciones", (req, res) => {
   }
 
   const registro = {
-    id: inscripciones.length + 1,
+    id: siguienteId++,
     nombre: nombre.trim(),
     correo: correo.trim(),
     telefono: telefono.trim(),
@@ -51,6 +54,19 @@ app.post("/api/inscripciones", (req, res) => {
   };
   inscripciones.push(registro);
   res.status(201).json(registro);
+});
+
+// Extensión: elimina una inscripción por su id.
+app.delete("/api/inscripciones/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const posicion = inscripciones.findIndex((inscripcion) => inscripcion.id === id);
+
+  if (posicion === -1) {
+    return res.status(404).json({ mensaje: "No existe una inscripción con ese id." });
+  }
+
+  const [eliminada] = inscripciones.splice(posicion, 1);
+  res.json({ mensaje: `Inscripción de ${eliminada.nombre} eliminada.` });
 });
 
 app.listen(PORT, () => {

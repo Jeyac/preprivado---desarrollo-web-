@@ -1122,3 +1122,91 @@ Resolví los dos cuestionarios del repaso. Saqué **7 de 7** en Frontend y **8 d
 **8. ¿Cuál es la diferencia más precisa entre Git y GitHub?** Git guarda las versiones del proyecto en mi computadora; GitHub guarda los repositorios en internet para compartirlos.
 
 ![Backend, pregunta 8](img/quiz-15.png)
+
+## Proyecto final
+
+### Verificación de la lista del proyecto
+
+Revisé cada punto del plan de trabajo y de la lista de control en el proyecto:
+
+- **Inicio (0–5 min):** `npm install` y `npm start` funcionan, y `localhost:3000` carga la página. ✅
+- **HTML (5–15 min):** el formulario tiene los cinco campos. Teléfono es `type="tel"`, correo es `type="email"`, taller y horario son listas. Cada `label` tiene un `for` igual al `id` de su campo, y todos llevan `required`. ✅
+- **CSS (15–25 min):** el formulario y la lista usan **Grid** (`display: grid`), las tarjetas de la lista usan **Flexbox** y hay un media query para pantallas de 640 px o menos. ✅
+- **POST en `server.js` (25–40 min):** lee los cinco valores, revisa que no falten y que el correo sea válido, crea un `id` y guarda el registro en el arreglo. Responde **201** al guardar y **400** si los datos están mal. ✅
+- **`app.js` (40–52 min):** usa `preventDefault()` para no recargar, envía los datos con `fetch` en JSON, muestra el mensaje del servidor y dibuja la lista con `textContent`. ✅
+- **README (52–58 min):** antes era el de la plantilla. Lo completé con el objetivo, la instalación, cómo iniciar, la tabla de rutas de la API y cómo probar GET, POST y DELETE. ✅
+- **Git y GitHub (58–65 min):** hay más de tres commits descriptivos, `.gitignore` excluye `node_modules/` y `.env`, y todo está subido a GitHub. ✅
+
+**Casos de prueba:**
+
+| Caso | Resultado |
+|---|---|
+| Envío válido | Responde 201 y el registro aparece en la lista sin recargar la página. ✅ |
+| Campo vacío | El navegador avisa por el `required`; si llega vacío al servidor, responde 400 "Completa todos los campos." ✅ |
+| Correo inválido | Responde 400 "El correo no tiene un formato válido." y no se guarda. ✅ |
+| Ancho de teléfono | A 390 px todo se lee bien y nada se sale de la pantalla (captura abajo). ✅ |
+
+**Una corrección que hice:** el `id` se calculaba con `inscripciones.length + 1`. Si se borra un registro, el siguiente podía repetir un `id` que ya existía. Lo cambié por un contador (`siguienteId`) que siempre sube, así cada registro tiene un `id` único.
+
+### Extensión · Quitar una inscripción
+
+Como terminé lo principal, hice la extensión:
+
+**1. Ruta `DELETE /api/inscripciones/:id` en `server.js`**
+
+```js
+app.delete("/api/inscripciones/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const posicion = inscripciones.findIndex((inscripcion) => inscripcion.id === id);
+
+  if (posicion === -1) {
+    return res.status(404).json({ mensaje: "No existe una inscripción con ese id." });
+  }
+
+  const [eliminada] = inscripciones.splice(posicion, 1);
+  res.json({ mensaje: `Inscripción de ${eliminada.nombre} eliminada.` });
+});
+```
+
+- `:id` es una parte variable de la dirección. Por ejemplo, en `/api/inscripciones/3` el id es 3.
+- `findIndex` busca en qué posición del arreglo está esa inscripción. Si no la encuentra, da `-1` y el servidor responde **404** (no encontrado).
+- Si la encuentra, `splice` la saca del arreglo y el servidor responde con un mensaje de éxito.
+
+**2. Botón "Quitar" en `app.js`**
+
+Cada participante de la lista ahora tiene un botón **Quitar**. Al presionarlo, JavaScript manda `fetch` con el método `DELETE`, muestra el mensaje del servidor y vuelve a cargar la lista:
+
+```js
+async function quitarInscripcion(id) {
+  const respuesta = await fetch(`/api/inscripciones/${id}`, { method: "DELETE" });
+  const resultado = await respuesta.json();
+  mensaje.textContent = resultado.mensaje;
+  cargarInscripciones();
+}
+```
+
+El botón tiene un `aria-label` como "Quitar la inscripción de Ana López", para que un lector de pantalla diga a quién se va a quitar.
+
+**3. Estilos en `styles.css`**
+
+El botón es rojo para que se note que borra. En pantalla ancha va a la derecha de cada tarjeta; en teléfono se acomoda debajo del nombre.
+
+**Pruebas de la extensión:**
+
+- `DELETE /api/inscripciones/1` con un id que existe → **200** "Inscripción de Ana López eliminada." ✅
+- El mismo `DELETE` otra vez → **404** "No existe una inscripción con ese id." ✅
+- `DELETE /api/inscripciones/abc` → **404** ✅
+- Después de borrar, un registro nuevo recibe un `id` nuevo (3) y no repite uno anterior. ✅
+- Al presionar **Quitar** en la página, aparece el mensaje y el participante desaparece de la lista sin recargar. ✅
+
+**Capturas del proyecto terminado** (con dos participantes inventados):
+
+Ancho normal:
+
+![Proyecto final en ancho normal](img/final-ancho-normal.png)
+
+Ancho de teléfono (390 px):
+
+![Proyecto final en ancho de teléfono](img/final-ancho-telefono.png)
+
+**URL de entrega:** https://github.com/Jeyac/preprivado---desarrollo-web-

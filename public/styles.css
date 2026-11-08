@@ -21,6 +21,9 @@ button:hover { background: #06656b; }
 #lista-inscripciones { display: grid; gap: .6rem; padding-left: 1.25rem; }
 #lista-inscripciones li { background: #eef9f6; }
 .tarjeta { padding: 1rem; border: 1px solid #dce3ed; border-radius: 12px; }
+#lista-inscripciones .tarjeta { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+.boton-quitar { min-height: 36px; margin-top: 0; padding: .4rem .8rem; background: #b3261e; font-size: .9rem; }
+.boton-quitar:hover { background: #8c1d18; }
 .titulo { color: #183153; }
 .vacio { color: #647188; background: transparent !important; }
 
@@ -29,4 +32,5 @@ button:hover { background: #06656b; }
   .contenedor { padding: 1.5rem 0; }
   .panel { padding: 1rem; }
   form { padding: 1rem; }
+  #lista-inscripciones .tarjeta { flex-direction: column; align-items: flex-start; }
 }
